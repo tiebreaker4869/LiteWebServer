@@ -1,9 +1,18 @@
-#include <iostream>
+#include <string>
+
+#include "config.h"
+#include "webserver.h"
 
 
-int main() {
+int main(int argc, char* argv[]) {
 
-    std::cout << "Hello, World!\n";
+    Config config;
+
+    Webserver server;
+
+    server.Init(config);
+
+    server.Start();
 
     return 0;
 }
