@@ -5,6 +5,6 @@ constexpr int kMaxFd = 65536;
 
 constexpr int kMaxEvents = 10000;
 
-constexpr int kTimeSlot = 5;
+constexpr int kTimeSlot = 5; // 最小超时单位
 
 #endif
