@@ -1,5 +1,6 @@
 #include "sql_connection_pool.h"
 #include "lock/locker.h"
+#include "log/log.h"
 
 SQLConnPool::SQLConnPool()
 {
@@ -30,6 +31,7 @@ void SQLConnPool::Init(SQLConfig config)
         if (!conn)
         {
             // log error info
+            LOG_ERROR("MySQL init error");
             exit(1);
         }
 
@@ -38,6 +40,7 @@ void SQLConnPool::Init(SQLConfig config)
         if (!conn)
         {
             // log error info
+            LOG_ERROR("MySQL connect error");
             exit(1);
         }
 
