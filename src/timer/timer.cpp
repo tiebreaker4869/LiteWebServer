@@ -96,6 +96,9 @@ void TimerManager::Tick()
     }
 }
 
+int *Utils::pipefd = nullptr;
+int Utils::epollfd = -1;
+
 void Utils::Init(int timeslot)
 {
     this->timeslot = timeslot;
@@ -139,7 +142,7 @@ void Utils::HandleSignal(int sig)
     errno = save_errno;
 }
 
-void Utils::RegisterSignalHandler(int sig, void (*handler)(int), bool restart = true)
+void Utils::RegisterSignalHandler(int sig, void (*handler)(int), bool restart)
 {
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
