@@ -8,19 +8,20 @@
 #include "lock/locker.h"
 #include "sql/sql_config.h"
 
-class SQLConnPool {
+class SQLConnPool
+{
 public:
-    MYSQL* GetConnection();
-    
-    bool ReleaseConnection(MYSQL* conn);
-    
+    MYSQL *GetConnection();
+
+    bool ReleaseConnection(MYSQL *conn);
+
     int GetNumFreeConn() const;
-    
+
     void DestroyPool();
 
     void Init(SQLConfig sql_config);
 
-    static SQLConnPool* GetInstance();
+    static SQLConnPool *GetInstance();
 
     std::string url; // 主机地址
     std::string db_name;
@@ -33,22 +34,24 @@ private:
     SQLConnPool();
     ~SQLConnPool();
 
-    int max_connection_; // 最大连接数
-    int cur_connection_; // 已经使用的连接数
+    int max_connection_;  // 最大连接数
+    int cur_connection_;  // 已经使用的连接数
     int free_connection_; // 空闲连接数
 
-    std::list<MYSQL*> pool_; // 连接池
+    std::list<MYSQL *> pool_; // 连接池
     Mutex mutex_;
     Semaphore reserve_;
 };
 
-class ConnectionRAIIWrapper {
+class ConnectionRAIIWrapper
+{
 public:
-    ConnectionRAIIWrapper(MYSQL** conn, SQLConnPool* conn_pool);
+    ConnectionRAIIWrapper(MYSQL **conn, SQLConnPool *conn_pool);
     ~ConnectionRAIIWrapper();
+
 private:
-    MYSQL* conn_;
-    SQLConnPool* pool_;
+    MYSQL *conn_;
+    SQLConnPool *pool_;
 };
 
 #endif

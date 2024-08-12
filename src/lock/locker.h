@@ -7,16 +7,21 @@
 
 #include "exceptions/wrap_exception.h"
 
-class Semaphore {
+class Semaphore
+{
 public:
-  Semaphore() {
-    if (sem_init(&sem_, 0, 0) != 0) {
+  Semaphore()
+  {
+    if (sem_init(&sem_, 0, 0) != 0)
+    {
       throw ServerException("Semaphore init failed");
     }
   }
 
-  Semaphore(int val) {
-    if (sem_init(&sem_, 0, val) != 0) {
+  Semaphore(int val)
+  {
+    if (sem_init(&sem_, 0, val) != 0)
+    {
       throw ServerException("Semaphore init failed");
     }
   }
@@ -31,10 +36,13 @@ private:
   sem_t sem_;
 };
 
-class Mutex {
+class Mutex
+{
 public:
-  Mutex() {
-    if (pthread_mutex_init(&mutex_, nullptr) != 0) {
+  Mutex()
+  {
+    if (pthread_mutex_init(&mutex_, nullptr) != 0)
+    {
       throw ServerException("Mutex init failed");
     }
   }
@@ -51,21 +59,26 @@ private:
   pthread_mutex_t mutex_;
 };
 
-class ConditionVariable {
+class ConditionVariable
+{
 public:
-  ConditionVariable() {
-    if (pthread_cond_init(&cond_, nullptr) != 0) {
+  ConditionVariable()
+  {
+    if (pthread_cond_init(&cond_, nullptr) != 0)
+    {
       throw ServerException("ConditionVariable init failed");
     }
   }
 
   ~ConditionVariable() { pthread_cond_destroy(&cond_); }
 
-  bool Wait(pthread_mutex_t *mutex) {
+  bool Wait(pthread_mutex_t *mutex)
+  {
     return pthread_cond_wait(&cond_, mutex) == 0;
   }
 
-  bool TimeWait(pthread_mutex_t *mutex, struct timespec t) {
+  bool TimeWait(pthread_mutex_t *mutex, struct timespec t)
+  {
     return pthread_cond_timedwait(&cond_, mutex, &t) == 0;
   }
 
@@ -75,6 +88,17 @@ public:
 
 private:
   pthread_cond_t cond_;
+};
+
+class LockGuard
+{
+public:
+  LockGuard(Mutex &mutex) : mutex_(mutex) { mutex_.Lock(); }
+
+  ~LockGuard() { mutex_.Unlock(); }
+
+private:
+  Mutex &mutex_;
 };
 
 #endif
