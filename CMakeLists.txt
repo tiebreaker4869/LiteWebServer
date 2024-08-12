@@ -19,7 +19,10 @@ pkg_check_modules(LIBMYSQLCLIENT REQUIRED mysqlclient)
 
 # 添加源文件
 file(GLOB_RECURSE SOURCES "src/*.cpp")
-file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp")
+file(GLOB_RECURSE TEST_SOURCES "tests/*.cpp" ${SOURCES})
+
+# exclude src/main.cpp from TEST_SOURCES
+list(REMOVE_ITEM TEST_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 
 # 添加可执行文件
 add_executable(${PROJECT_NAME} ${SOURCES})
@@ -37,9 +40,8 @@ target_compile_options(${PROJECT_NAME}_test PRIVATE ${LIBMYSQLCLIENT_CFLAGS_OTHE
 
 # 链接库
 target_link_libraries(${PROJECT_NAME} PRIVATE pthread ${LIBMYSQLCLIENT_LIBRARIES})
-target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::GTest GTest::Main pthread)
+target_link_libraries(${PROJECT_NAME}_test PRIVATE GTest::GTest GTest::Main pthread ${LIBMYSQLCLIENT_LIBRARIES})
 
 # 启用测试
 enable_testing()
 add_test(NAME ${PROJECT_NAME}_test COMMAND ${PROJECT_NAME}_test)
-

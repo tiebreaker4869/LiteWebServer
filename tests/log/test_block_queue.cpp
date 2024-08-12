@@ -4,14 +4,16 @@
 #include "log/block_queue.h"
 
 // 测试 BlockQueue 的构造函数
-TEST(BlockQueueTest, Constructor) {
+TEST(BlockQueueTest, Constructor)
+{
     BlockQueue<int> queue(10);
     EXPECT_EQ(queue.Size(), 0);
     EXPECT_EQ(queue.MaxSize(), 10);
 }
 
 // 测试 Clear 方法
-TEST(BlockQueueTest, Clear) {
+TEST(BlockQueueTest, Clear)
+{
     BlockQueue<int> queue(10);
     queue.Push(1);
     queue.Clear();
@@ -20,7 +22,8 @@ TEST(BlockQueueTest, Clear) {
 }
 
 // 测试 Full 方法
-TEST(BlockQueueTest, Full) {
+TEST(BlockQueueTest, Full)
+{
     BlockQueue<int> queue(2);
     queue.Push(1);
     queue.Push(2);
@@ -28,7 +31,8 @@ TEST(BlockQueueTest, Full) {
 }
 
 // 测试 Empty 方法
-TEST(BlockQueueTest, Empty) {
+TEST(BlockQueueTest, Empty)
+{
     BlockQueue<int> queue(2);
     EXPECT_TRUE(queue.Empty());
     queue.Push(1);
@@ -36,7 +40,8 @@ TEST(BlockQueueTest, Empty) {
 }
 
 // 测试 Front 方法
-TEST(BlockQueueTest, Front) {
+TEST(BlockQueueTest, Front)
+{
     BlockQueue<int> queue(2);
     queue.Push(1);
     int front;
@@ -45,7 +50,8 @@ TEST(BlockQueueTest, Front) {
 }
 
 // 测试 Back 方法
-TEST(BlockQueueTest, Back) {
+TEST(BlockQueueTest, Back)
+{
     BlockQueue<int> queue(2);
     queue.Push(1);
     int back;
@@ -54,14 +60,16 @@ TEST(BlockQueueTest, Back) {
 }
 
 // 测试 Push 方法
-TEST(BlockQueueTest, Push) {
+TEST(BlockQueueTest, Push)
+{
     BlockQueue<int> queue(2);
     EXPECT_TRUE(queue.Push(1));
     EXPECT_EQ(queue.Size(), 1);
 }
 
 // 测试 Pop 方法
-TEST(BlockQueueTest, Pop) {
+TEST(BlockQueueTest, Pop)
+{
     BlockQueue<int> queue(2);
     queue.Push(1);
     int elem;
@@ -71,31 +79,37 @@ TEST(BlockQueueTest, Pop) {
 }
 
 // 测试带超时的 Pop 方法
-TEST(BlockQueueTest, PopWithTimeout) {
+TEST(BlockQueueTest, PopWithTimeout)
+{
     BlockQueue<int> queue(2);
     int elem;
     EXPECT_FALSE(queue.Pop(elem, 1000)); // 超时返回 false
 }
 
 // 多线程并发测试
-void *PushThread(void *arg) {
+void *PushThread(void *arg)
+{
     BlockQueue<int> *queue = (BlockQueue<int> *)arg;
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10000; i++)
+    {
         queue->Push(i);
     }
     return NULL;
 }
 
-void *PopThread(void *arg) {
+void *PopThread(void *arg)
+{
     BlockQueue<int> *queue = (BlockQueue<int> *)arg;
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 10000; i++)
+    {
         int elem;
         queue->Pop(elem);
     }
     return NULL;
 }
 
-TEST(BlockQueueTest, MultiThread) {
+TEST(BlockQueueTest, MultiThread)
+{
     BlockQueue<int> queue(100);
     pthread_t push_tid, pop_tid;
     pthread_create(&push_tid, NULL, PushThread, &queue);
@@ -103,10 +117,4 @@ TEST(BlockQueueTest, MultiThread) {
     pthread_join(push_tid, NULL);
     pthread_join(pop_tid, NULL);
     EXPECT_EQ(queue.Size(), 0);
-}
-
-
-int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
 }

@@ -20,9 +20,9 @@ enum LogLevel
 struct LogConfig
 {
     std::string log_name;
-    int log_buf_size;
-    int split_lines;
-    int max_queue_size;
+    int log_buf_size = 8192;
+    int split_lines = 5000000;
+    int max_queue_size = 0;
     int close_log;
 };
 
@@ -38,6 +38,7 @@ public:
     static void *FlushLogThread(void *args)
     {
         Log::GetInstance()->AsyncWriteLog();
+        return nullptr;
     }
 
     bool Init(LogConfig config);
@@ -48,9 +49,10 @@ public:
 
 private:
     Log();
+
     ~Log();
 
-    void *AsyncWriteLog()
+    void AsyncWriteLog()
     {
         std::string single_log;
 
@@ -61,8 +63,8 @@ private:
         }
     }
 
-    std::string dir_name_; // 路径名
-    std::string log_name_; // log 文件名
+    char dir_name_[128];   // 路径名
+    char log_name_[128];   // log 文件名
     int split_lines_;      // 日志最大行数
     int log_buf_size_;     // 日志缓冲区打下
     long long line_count_; // 日志当前行数
