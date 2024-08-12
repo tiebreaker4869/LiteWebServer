@@ -7,4 +7,10 @@ constexpr int kMaxEvents = 10000;
 
 constexpr int kTimeSlot = 5; // 最小超时单位
 
+enum Operation
+{
+    READ = 0,
+    WRITE
+};
+
 #endif
