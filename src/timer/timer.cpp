@@ -133,6 +133,12 @@ void Utils::EPollRegisterFd(int epollfd, int fd, bool one_shot, int trig_mode)
     SetNonBlocking(fd);
 }
 
+void Utils::EPollRemove(int epollfd, int fd)
+{
+    epoll_ctl(epollfd, EPOLL_CTL_DEL, fd, nullptr);
+    close(fd);
+}
+
 void Utils::HandleSignal(int sig)
 {
     // 为了保证可重入性，保留原来的 errno
@@ -162,7 +168,8 @@ void Utils::HandleTimerEvent()
     alarm(timeslot);
 }
 
-void Utils::PrintError(int connfd, const char* info) {
+void Utils::PrintError(int connfd, const char *info)
+{
     send(connfd, info, strlen(info), 0);
     close(connfd);
 }

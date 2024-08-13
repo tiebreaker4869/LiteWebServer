@@ -55,6 +55,8 @@ public:
 
     void EPollRegisterFd(int epollfd, int fd, bool one_shot, int trig_mode);
 
+    void EPollRemove(int epollfd, int fd);
+
     static void HandleSignal(int sig);
 
     void HandleTimerEvent();
