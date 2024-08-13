@@ -57,6 +57,8 @@ public:
 
     void EPollRemove(int epollfd, int fd);
 
+    void EPollMod(int epollfd, int fd, int ev, int trig_mode);
+
     static void HandleSignal(int sig);
 
     void HandleTimerEvent();

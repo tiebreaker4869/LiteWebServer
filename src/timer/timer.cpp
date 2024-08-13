@@ -139,6 +139,20 @@ void Utils::EPollRemove(int epollfd, int fd)
     close(fd);
 }
 
+void Utils::EPollMod(int epollfd, int fd, int ev, int trig_mode)
+{
+    epoll_event event;
+    event.data.fd = fd;
+    event.events = ev | EPOLLONESHOT | EPOLLRDHUP;
+
+    if (trig_mode == 1)
+    {
+        event.events |= EPOLLET;
+    }
+
+    epoll_ctl(epollfd, EPOLL_CTL_MOD, fd, &event);
+}
+
 void Utils::HandleSignal(int sig)
 {
     // 为了保证可重入性，保留原来的 errno
