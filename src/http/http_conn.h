@@ -51,6 +51,14 @@ enum LineStatus
 
 struct HttpConfig
 {
+    int sockfd;
+    const sockaddr_in addr;
+    std::string root;
+    int trig_mode;
+    int close_log;
+    std::string user;
+    std::string password;
+    std::string db_name;
 };
 
 class HttpConn
@@ -74,6 +82,7 @@ public:
     bool progress;
     static int epollfd;
     static int user_count;
+    static std::map<std::string, std::string> users;
     MYSQL *sql_conn;
     int close_log;
     Operation op; // 读为 0(kRead) 写为 1(kWrite)
@@ -122,9 +131,8 @@ private:
     char *str_; // 存储请求头数据
     int bytes_to_send_;
     int bytes_have_sent_;
-    char *doc_root_;
+    std::string doc_root_;
 
-    std::map<std::string, std::string> users_;
     int trig_mode_;
 
     std::string sql_user_;
