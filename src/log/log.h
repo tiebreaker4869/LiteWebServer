@@ -1,4 +1,4 @@
-#ifndef LWS_LOG_LOG_H
+#ifndef LWS_LOG_LOG_H_
 #define LWS_LOG_LOG_H_
 
 #include <cstdio>
