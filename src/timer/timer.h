@@ -53,11 +53,11 @@ public:
     // 对文件设置非阻塞模式
     int SetNonBlocking(int fd);
 
-    void EPollRegisterFd(int epollfd, int fd, bool one_shot, int trig_mode);
+    static void EPollRegisterFd(int epollfd, int fd, bool one_shot, int trig_mode);
 
-    void EPollRemove(int epollfd, int fd);
+    static void EPollRemove(int epollfd, int fd);
 
-    void EPollMod(int epollfd, int fd, int ev, int trig_mode);
+    static void EPollMod(int epollfd, int fd, int ev, int trig_mode);
 
     static void HandleSignal(int sig);
 
