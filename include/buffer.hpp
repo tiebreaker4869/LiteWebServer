@@ -8,7 +8,7 @@
 class Buffer
 {
 public:
-    Buffer(int buffer_size = 1024);
+    explicit Buffer(int buffer_size = 1024);
     ~Buffer() = default;
 
     size_t WritableBytes() const;
