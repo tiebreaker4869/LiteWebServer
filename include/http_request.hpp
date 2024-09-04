@@ -62,7 +62,7 @@ private:
     std::unordered_map<std::string, std::string> header_;
     std::unordered_map<std::string, std::string> post_;
 
-    static const std::unordered_set<std::string> kDefaultHTML;
-    static const std::unordered_map<std::string, int> kDefaultHTMLTag;
+    static const std::unordered_set<std::string> kDefaultHtml;
+    static const std::unordered_map<std::string, int> kDefaultHtmlTag;
     static int ConvertHex_(char ch);
 };
