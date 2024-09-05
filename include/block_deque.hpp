@@ -6,27 +6,126 @@
 #include <condition_variable>
 #include <sys/time.h>
 
+/**
+ * @brief A thread-safe blocking deque implementation.
+ *
+ * This class provides a double-ended queue with blocking operations,
+ * suitable for producer-consumer scenarios. It supports a maximum capacity
+ * and provides synchronization mechanisms for thread-safe access.
+ *
+ * @tparam T The type of elements stored in the deque.
+ */
 template <typename T>
 class BlockDeque
 {
 public:
+    /**
+     * @brief Construct a new Block Deque object.
+     *
+     * @param capacity The maximum number of elements the deque can hold (default: 1024).
+     */
     explicit BlockDeque(size_t capacity = 1024);
+
+    /**
+     * @brief Destroy the Block Deque object and release any resources.
+     */
     ~BlockDeque();
 
+    /**
+     * @brief Remove all elements from the deque.
+     */
     void Clear();
+
+    /**
+     * @brief Close the deque, preventing further operations and notifying all waiting threads.
+     */
     void Close();
+
+    /**
+     * @brief Notify all waiting consumer threads.
+     */
     void Flush();
 
+    /**
+     * @brief Add an item to the back of the deque.
+     *
+     * If the deque is full, this operation will block until space becomes available.
+     *
+     * @param item The item to be added.
+     */
     void PushBack(const T &item);
+
+    /**
+     * @brief Add an item to the front of the deque.
+     *
+     * If the deque is full, this operation will block until space becomes available.
+     *
+     * @param item The item to be added.
+     */
     void PushFront(const T &item);
+
+    /**
+     * @brief Remove and return the front item from the deque.
+     *
+     * If the deque is empty, this operation will block until an item becomes available.
+     *
+     * @param item Reference to store the removed item.
+     * @return true if an item was successfully removed, false if the deque is closed.
+     */
     bool PopFront(T &item);
+
+    /**
+     * @brief Remove and return the front item from the deque with a timeout.
+     *
+     * If the deque is empty, this operation will block until an item becomes available
+     * or the specified timeout is reached.
+     *
+     * @param item Reference to store the removed item.
+     * @param timeout Maximum time to wait in seconds.
+     * @return true if an item was successfully removed, false if timed out or the deque is closed.
+     */
     bool PopFront(T &item, int timeout);
 
+    /**
+     * @brief Check if the deque is empty.
+     *
+     * @return true if the deque is empty, false otherwise.
+     */
     bool Empty() const;
+
+    /**
+     * @brief Check if the deque is full.
+     *
+     * @return true if the deque is at capacity, false otherwise.
+     */
     bool Full() const;
+
+    /**
+     * @brief Get the current number of elements in the deque.
+     *
+     * @return The number of elements in the deque.
+     */
     size_t Size() const;
+
+    /**
+     * @brief Get the maximum capacity of the deque.
+     *
+     * @return The maximum number of elements the deque can hold.
+     */
     size_t Capacity() const;
+
+    /**
+     * @brief Get the front element of the deque without removing it.
+     *
+     * @return The front element.
+     */
     T Front() const;
+
+    /**
+     * @brief Get the back element of the deque without removing it.
+     *
+     * @return The back element.
+     */
     T Back() const;
 
 private:
