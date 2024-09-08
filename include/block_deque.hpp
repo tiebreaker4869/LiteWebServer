@@ -224,7 +224,7 @@ void BlockDeque<T>::PushBack(const T &item)
     std::unique_lock<std::mutex> lock{mtx_};
     while (deq_.size() >= capacity_)
     {
-        cond_producer_.wait(lock)
+        cond_producer_.wait(lock);
     }
     deq_.push_back(item);
     cond_consumer_.notify_one();

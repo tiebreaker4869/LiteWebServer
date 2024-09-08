@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <stdarg.h>
 
 #include "buffer.hpp"
 #include "block_deque.hpp"

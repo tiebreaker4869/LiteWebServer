@@ -20,6 +20,7 @@ struct TimerNode
     TimeStamp expires;  ///< Expiration time of the timer
     TimeoutCallBack cb; ///< Callback function to be executed when the timer expires
     bool operator<(const TimerNode &t) { return expires < t.expires; }
+    TimerNode(int id, TimeStamp expires, TimeoutCallBack cb) : id(id), expires(expires), cb(cb) {}
 };
 
 /**
@@ -35,12 +36,12 @@ public:
     /**
      * @brief Construct a new Timer object
      */
-    Timer();
+    Timer() { heap_.reserve(64); }
 
     /**
      * @brief Destroy the Timer object
      */
-    ~Timer();
+    ~Timer() { Clear(); }
 
     /**
      * @brief Adjust the expiration time of an existing timer

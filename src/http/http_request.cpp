@@ -234,3 +234,50 @@ bool HttpRequest::UserVerify(const std::string &name, const std::string &pwd, bo
     mysql_close(sql);
     return false;
 }
+
+bool HttpRequest::Parse(Buffer &buffer)
+{
+    const char CRLF[] = "\r\n";
+    if (buffer.ReadableBytes() <= 0)
+    {
+        return false;
+    }
+    while (buffer.ReadableBytes() && state_ != ParseState::kFinish)
+    {
+        // find a CRLF
+        const char *line_end = std::search(buffer.ReadPtr(), buffer.ConstWritePtr(), CRLF, CRLF + 2);
+        std::string line{buffer.ReadPtr(), line_end};
+
+        switch (state_)
+        {
+        case ParseState::kRequestLine:
+            if (!ParseRequestLine_(line))
+            {
+                return false;
+            }
+            ParsePath_();
+            break;
+        case ParseState::kHeader:
+            ParseHeader_(line);
+            if (buffer.ReadableBytes() <= 2 || method_ == "GET")
+            {
+                buffer.InitPtr();
+                state_ = ParseState::kFinish;
+            }
+            break;
+        case ParseState::kBody:
+            ParseBody_(line);
+            break;
+        default:
+            break;
+        }
+        if (line_end == buffer.ConstWritePtr() || state_ == ParseState::kFinish)
+        {
+            buffer.InitPtr();
+            break;
+        }
+        buffer.UpdateReadPtrUntilEnd(line_end + 2);
+    }
+    LOG_DEBUG("[%s], [%s], [%s]", method_.c_str(), path_.c_str(), version_.c_str());
+    return true;
+}
