@@ -1,5 +1,7 @@
 # ide related
 .vscode
+build
+bin
 
 # Prerequisites
 *.d
