@@ -45,10 +45,9 @@ public:
     /**
      * @brief Removes a file descriptor from the epoll instance.
      * @param fd The file descriptor to remove.
-     * @param events The events that were being monitored (unused in most implementations).
      * @return true if the operation was successful, false otherwise.
      */
-    bool DeleteFd(int fd, uint32_t events);
+    bool DeleteFd(int fd);
 
     /**
      * @brief Waits for events on the epoll instance.

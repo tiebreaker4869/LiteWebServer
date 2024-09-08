@@ -34,7 +34,7 @@ bool Epoll::ModifyFd(int fd, uint32_t events)
     return epoll_ctl(epoll_fd_, EPOLL_CTL_MOD, fd, &ev) == 0;
 }
 
-bool Epoll::DeleteFd(int fd, uint32_t events)
+bool Epoll::DeleteFd(int fd)
 {
     if (fd < 0)
     {
